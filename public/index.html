@@ -194,17 +194,31 @@ button:focus-visible {
   font-size: 13px;
 }
 
+
 .badge {
   display: inline-flex;
   align-items: center;
-  padding: 4px 9px;
+  gap: 6px;
+  padding: 5px 10px;
   color: #0f766e;
   background: #ccfbf1;
+  border: 1px solid #99f6e4;
   border-radius: 999px;
   font-size: 11px;
   font-weight: 750;
+  line-height: 1.4;
   vertical-align: middle;
 }
+
+.badge::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  flex: 0 0 6px;
+  background: currentColor;
+  border-radius: 50%;
+}
+
 
 /* Dynamic check-in and family brief content */
 
@@ -275,7 +289,199 @@ button:focus-visible {
   }
 }
 
-</style></head><body><header class="top"><h1>CareRelay</h1><p>Consent-first family coordination</p></header><main class="wrap">
+/* Family brief refinement */
+
+#brief {
+  padding: 14px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  color: #334155;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+#brief:empty {
+  display: none;
+}
+
+#actions {
+  padding-top: 14px;
+  border-top: 1px solid #edf2f7;
+}
+
+#actions h2 {
+  color: #142b4a;
+}
+
+.notice {
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+
+.muted {
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+/* CareRelay brand identity */
+
+header h1.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 5px;
+  color: #fff;
+  font-size: 28px;
+  font-weight: 750;
+  letter-spacing: -0.8px;
+  line-height: 1.2;
+}
+
+.brand-icon {
+  display: inline-flex;
+  flex: 0 0 42px;
+  width: 42px;
+  height: 42px;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.brand-icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+@media (max-width: 760px) {
+  header h1.brand {
+    gap: 10px;
+    font-size: 25px;
+  }
+
+  .brand-icon {
+    flex-basis: 38px;
+    width: 38px;
+    height: 38px;
+    border-radius: 11px;
+  }
+}
+
+/* CareRelay — coordination and task presentation */
+
+#actions {
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid #e8eef5;
+}
+
+#actions h2 {
+  margin-bottom: 12px;
+  font-size: 17px;
+}
+
+#actions ul,
+#actions ol {
+  display: grid;
+  gap: 10px;
+  margin: 12px 0;
+  padding-left: 20px;
+}
+
+#actions li {
+  padding: 12px 14px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  line-height: 1.65;
+}
+
+#actions li::marker {
+  color: #0d9488;
+  font-weight: 700;
+}
+
+#actions button {
+  min-height: 38px;
+  margin: 6px 6px 0 0;
+  padding: 9px 13px;
+  font-size: 13px;
+}
+
+#checkin,
+#brief {
+  overflow-wrap: anywhere;
+}
+
+#checkin {
+  line-height: 1.75;
+}
+
+#brief {
+  line-height: 1.8;
+}
+
+@media (max-width: 760px) {
+  #actions li {
+    padding: 11px 12px;
+  }
+}
+
+/* CareRelay — polished empty states */
+
+#checkin:empty,
+#brief:empty {
+  display: block;
+  min-height: 76px;
+  padding: 18px;
+  background: #f8fafc;
+  border: 1px dashed #cbd5e1;
+  border-radius: 12px;
+}
+
+#checkin:empty::before {
+  content: "Your coordination updates will appear here after a check-in.";
+  display: block;
+  color: #64748b;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+#brief:empty::before {
+  content: "Your family brief will appear here when a shareable check-in is available.";
+  display: block;
+  color: #64748b;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+/* Keep empty panels compact on mobile */
+
+@media (max-width: 760px) {
+  #checkin:empty,
+  #brief:empty {
+    min-height: 64px;
+    padding: 14px;
+  }
+}
+
+</style></head><body><header class="top"><h1>
+<h1 class="brand">
+  <span class="brand-icon" aria-hidden="true">
+    <svg viewBox="0 0 48 48" fill="none">
+      <rect width="48" height="48" rx="14" fill="#0D9488"/>
+      <path d="M24 35S10 27 10 18.5C10 11.5 19 9 24 17C29 9 38 11.5 38 18.5C38 27 24 35 24 35Z"
+        stroke="white" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M15 23H21L24 18L28 27L31 23H35"
+        stroke="white" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </span>
+  <span>CareRelay</span>
+</h1>
+</h1><p>Consent-first family coordination</p></header><main class="wrap">
 <section class="card"><h2>New check-in</h2><label>Family member</label><input id="person" value="Daniel Shah"><label>Relationship</label><input id="relation" value="father"><label>Consent</label><select id="consent"><option value="share">Share with family</option><option value="private">Keep private</option></select><label>Update</label><textarea id="update">Dad missed his evening medication reminder and said he felt unusually tired. He is resting and asked Maya to check in later.</textarea><button onclick="createCheckin()">Create check-in</button><p class="muted">CareRelay coordinates follow-up; it is not medical advice or an emergency service.</p></section>
 <section class="card"><h2>Today’s coordination</h2><div id="notice" class="notice"></div><div id="checkin" class="muted">Create a check-in to begin.</div><div id="actions"></div></section>
 <section class="card"><h2>Family brief <span id="consentBadge" class="badge">Awaiting consent</span></h2><div id="brief" class="muted">A factual, consent-aware brief will appear here.</div><h2 style="margin-top:28px">Why it matters</h2><p class="muted">One unclear message becomes an owner-based plan, while the consent gate protects private conversations.</p></section>

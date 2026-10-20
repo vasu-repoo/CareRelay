@@ -59,8 +59,8 @@ Express API ───────────────► Amazon Bedrock Conv
 ### Start the dashboard
 
 ```powershell
-git clone https://github.com/vasu-repoo/carecircle-mcp.git
-cd carecircle-mcp
+git clone https://github.com/vasu-repoo/CareRelay.git
+cd CareRelay
 Copy-Item .env.example .env
 npm install
 npm run dev

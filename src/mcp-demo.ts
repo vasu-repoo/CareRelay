@@ -1,7 +1,7 @@
 import { Client } from "@modelcontextprotocol/client";
 import { StdioClientTransport } from "@modelcontextprotocol/client/stdio";
 
-const client = new Client({ name: "carecircle-demo-client", version: "1.0.0" });
+const client = new Client({ name: "CareRelay-demo-client", version: "1.0.0" });
 await client.connect(new StdioClientTransport({ command: "npx", args: ["tsx", "src/mcp.ts"] }));
 console.log("TOOLS:", (await client.listTools()).tools.map(tool => tool.name).join(", "));
 const created = await client.callTool({ name: "create_checkin", arguments: {

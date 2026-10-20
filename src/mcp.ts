@@ -4,7 +4,7 @@ import * as z from "zod/v4";
 import { createCheckIn, getCheckIn, getPlan, makePlan } from "./care.js";
 import { makeFamilyBrief } from "./bedrock.js";
 
-const server = new McpServer({ name: "CareCircle", version: "1.0.0" });
+const server = new McpServer({ name: "CareRelay", version: "1.0.0" });
 server.registerTool("create_checkin", {
   title: "Create consent-aware check-in",
   description: "Save a family check-in and return its consent state and safety notice.",
@@ -28,5 +28,5 @@ server.registerTool("get_consent_status", {
   const checkIn = getCheckIn(checkinId); if (!checkIn) return { content: [{ type: "text", text: "Check-in not found." }], isError: true };
   return { content: [{ type: "text", text: JSON.stringify({ consent: checkIn.consent, explanation: checkIn.consent === "share" ? "Sharing allowed." : "Private: family brief blocked." }) }] };
 });
-console.error("CareCircle MCP server running on stdio");
+console.error("CareRelay MCP server running on stdio");
 void serveStdio(() => server);

@@ -7,7 +7,9 @@ const fallback = (checkIn: CheckIn, tasks: Task[]) =>
 
 export async function makeFamilyBrief(checkIn: CheckIn, tasks: Task[]) {
   if (checkIn.consent !== "share") return "This check-in is private. No family brief was created.";
-  if (process.env.USE_BEDROCK !== "true") return fallback(checkIn, tasks) + " [Local demo fallback]";
+  if (process.env.USE_BEDROCK !== "true") {
+  return fallback(checkIn, tasks) + "\n\nDemo mode: using a local-generated brief; Amazon Bedrock is not active.";
+}
   const client = new BedrockRuntimeClient({ region: process.env.AWS_REGION || "ap-southeast-2" });
   const command = new ConverseCommand({
     modelId: process.env.BEDROCK_MODEL_ID || "global.amazon.nova-2-lite-v1:0",

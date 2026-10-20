@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "start": "tsx src/server.ts",
     "dev": "tsx src/server.ts",
     "mcp": "tsx src/mcp.ts",
     "mcp:demo": "tsx src/mcp-demo.ts"

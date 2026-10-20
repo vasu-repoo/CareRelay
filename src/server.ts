@@ -25,4 +25,5 @@ app.post("/api/checkins/:id/brief", async (req, res) => {
   try { res.json({ brief: await makeFamilyBrief(checkIn, getPlan(checkIn.id)) }); }
   catch { res.status(502).json({ error: "The AI brief is unavailable. Your saved check-in and plan are still available." }); }
 });
-app.listen(3000, () => console.log("CareRelay running at http://localhost:3000"));
+const port = Number(process.env.PORT || 3000);
+app.listen(port, "0.0.0.0", () => console.log(`CareRelay running on port ${port}`));

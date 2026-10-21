@@ -1,493 +1,1004 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>CareRelay</title><style>
-
-:root {
-  --navy: #142b4a;
-  --navy-light: #1c4263;
-  --teal: #0d9488;
-  --teal-dark: #0f766e;
-  --bg: #f3f6fb;
-  --surface: #ffffff;
-  --text: #172b45;
-  --muted: #64748b;
-  --border: #e2e8f0;
-  --radius: 16px;
-  --shadow: 0 5px 20px rgba(20, 43, 74, 0.06);
-}
-
-* {
-  box-sizing: border-box;
-}
-
-html {
-  scroll-behavior: smooth;
-}
-
-body {
-  margin: 0;
-  background: var(--bg);
-  color: var(--text);
-  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  font-size: 14px;
-  line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
-}
-
-/* Header */
-
-header {
-  padding: 22px max(24px, calc((100% - 1100px) / 2));
-  background: linear-gradient(120deg, var(--navy), var(--navy-light));
-  color: white;
-}
-
-header h1 {
-  margin: 0 0 4px;
-  color: white;
-  font-size: 28px;
-  font-weight: 750;
-  letter-spacing: -0.8px;
-}
-
-header p {
-  margin: 0;
-  color: #d4e3f2;
-  font-size: 13px;
-}
-
-/* Main dashboard */
-
-main {
-  width: min(1100px, calc(100% - 40px));
-  margin: 28px auto 44px;
-}
-
-.wrap {
-  display: grid;
-  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
-  grid-template-areas:
-    "checkin coordination"
-    "checkin brief";
-  align-items: start;
-  gap: 20px;
-  width: 100%;
-}
-
-/* Dashboard cards */
-
-.wrap > .card {
-  width: 100%;
-  min-width: 0;
-  padding: 22px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-}
-
-.wrap > .card:nth-child(1) {
-  grid-area: checkin;
-}
-
-.wrap > .card:nth-child(2) {
-  grid-area: coordination;
-}
-
-.wrap > .card:nth-child(3) {
-  grid-area: brief;
-}
-
-.card h2 {
-  margin: 0 0 15px;
-  color: var(--navy);
-  font-size: 18px;
-  font-weight: 750;
-  line-height: 1.4;
-  letter-spacing: -0.3px;
-}
-
-/* Form controls */
-
-label {
-  display: block;
-  margin: 12px 0 5px;
-  color: var(--text);
-  font-size: 13px;
-  font-weight: 650;
-}
-
-input,
-select,
-textarea {
-  display: block;
-  width: 100%;
-  min-width: 0;
-  padding: 10px 12px;
-  color: var(--text);
-  background: #fff;
-  border: 1px solid #cbd5e1;
-  border-radius: 9px;
-  font: inherit;
-  font-size: 14px;
-  outline: none;
-  transition: border-color 0.18s, box-shadow 0.18s;
-}
-
-input:focus,
-select:focus,
-textarea:focus {
-  border-color: var(--teal);
-  box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.12);
-}
-
-textarea {
-  min-height: 100px;
-  resize: vertical;
-}
-
-input::placeholder,
-textarea::placeholder {
-  color: #94a3b8;
-}
-
-/* Buttons */
-
-button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 40px;
-  margin-top: 14px;
-  padding: 10px 16px;
-  color: white;
-  background: var(--teal);
-  border: 1px solid transparent;
-  border-radius: 9px;
-  font: inherit;
-  font-weight: 700;
-  cursor: pointer;
-  transition: background 0.18s, transform 0.18s;
-}
-
-button:hover {
-  background: var(--teal-dark);
-  transform: translateY(-1px);
-}
-
-button:focus-visible {
-  outline: 3px solid #5eead4;
-  outline-offset: 3px;
-}
-
-/* Supporting text and notices */
-
-.muted {
-  color: var(--muted);
-}
-
-.notice {
-  min-height: 12px;
-  padding: 10px 12px;
-  color: #92400e;
-  background: #fffbeb;
-  border: 1px solid #fde68a;
-  border-radius: 9px;
-  font-size: 13px;
-}
-
-
-.badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 5px 10px;
-  color: #0f766e;
-  background: #ccfbf1;
-  border: 1px solid #99f6e4;
-  border-radius: 999px;
-  font-size: 11px;
-  font-weight: 750;
-  line-height: 1.4;
-  vertical-align: middle;
-}
-
-.badge::before {
-  content: "";
-  width: 6px;
-  height: 6px;
-  flex: 0 0 6px;
-  background: currentColor;
-  border-radius: 50%;
-}
-
-
-/* Dynamic check-in and family brief content */
-
-#checkin,
-#brief {
-  max-width: 100%;
-  overflow-wrap: anywhere;
-  white-space: pre-wrap;
-}
-
-#actions {
-  margin-top: 18px;
-}
-
-#actions h2 {
-  margin-bottom: 10px;
-}
-
-#actions button {
-  margin: 6px 6px 0 0;
-}
-
-/* Responsive dashboard */
-
-@media (max-width: 760px) {
-  header {
-    padding: 20px 18px;
-  }
-
-  header h1 {
-    font-size: 25px;
-  }
-
-  main {
-    width: calc(100% - 24px);
-    margin: 18px auto 30px;
-  }
-
-  .wrap {
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-areas:
-      "checkin"
-      "coordination"
-      "brief";
-    gap: 15px;
-  }
-
-  .wrap > .card {
-    padding: 18px;
-    border-radius: 14px;
-  }
-
-  .card h2 {
-    font-size: 17px;
-  }
-
-  button {
-    max-width: 100%;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    scroll-behavior: auto;
-    transition: none;
-  }
-}
-
-/* Family brief refinement */
-
-#brief {
-  padding: 14px;
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
-  border-radius: 12px;
-  color: #334155;
-  font-size: 14px;
-  line-height: 1.8;
-}
-
-#brief:empty {
-  display: none;
-}
-
-#actions {
-  padding-top: 14px;
-  border-top: 1px solid #edf2f7;
-}
-
-#actions h2 {
-  color: #142b4a;
-}
-
-.notice {
-  margin-bottom: 8px;
-  line-height: 1.5;
-}
-
-.muted {
-  font-size: 13px;
-  line-height: 1.7;
-}
-
-/* CareRelay brand identity */
-
-header h1.brand {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin: 0 0 5px;
-  color: #fff;
-  font-size: 28px;
-  font-weight: 750;
-  letter-spacing: -0.8px;
-  line-height: 1.2;
-}
-
-.brand-icon {
-  display: inline-flex;
-  flex: 0 0 42px;
-  width: 42px;
-  height: 42px;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
-}
-
-.brand-icon svg {
-  display: block;
-  width: 100%;
-  height: 100%;
-}
-
-@media (max-width: 760px) {
-  header h1.brand {
-    gap: 10px;
-    font-size: 25px;
-  }
-
-  .brand-icon {
-    flex-basis: 38px;
-    width: 38px;
-    height: 38px;
-    border-radius: 11px;
-  }
-}
-
-/* CareRelay — coordination and task presentation */
-
-#actions {
-  margin-top: 18px;
-  padding-top: 16px;
-  border-top: 1px solid #e8eef5;
-}
-
-#actions h2 {
-  margin-bottom: 12px;
-  font-size: 17px;
-}
-
-#actions ul,
-#actions ol {
-  display: grid;
-  gap: 10px;
-  margin: 12px 0;
-  padding-left: 20px;
-}
-
-#actions li {
-  padding: 12px 14px;
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
-  border-radius: 10px;
-  line-height: 1.65;
-}
-
-#actions li::marker {
-  color: #0d9488;
-  font-weight: 700;
-}
-
-#actions button {
-  min-height: 38px;
-  margin: 6px 6px 0 0;
-  padding: 9px 13px;
-  font-size: 13px;
-}
-
-#checkin,
-#brief {
-  overflow-wrap: anywhere;
-}
-
-#checkin {
-  line-height: 1.75;
-}
-
-#brief {
-  line-height: 1.8;
-}
-
-@media (max-width: 760px) {
-  #actions li {
-    padding: 11px 12px;
-  }
-}
-
-/* CareRelay — polished empty states */
-
-#checkin:empty,
-#brief:empty {
-  display: block;
-  min-height: 76px;
-  padding: 18px;
-  background: #f8fafc;
-  border: 1px dashed #cbd5e1;
-  border-radius: 12px;
-}
-
-#checkin:empty::before {
-  content: "Your coordination updates will appear here after a check-in.";
-  display: block;
-  color: #64748b;
-  font-size: 13px;
-  line-height: 1.7;
-}
-
-#brief:empty::before {
-  content: "Your family brief will appear here when a shareable check-in is available.";
-  display: block;
-  color: #64748b;
-  font-size: 13px;
-  line-height: 1.7;
-}
-
-/* Keep empty panels compact on mobile */
-
-@media (max-width: 760px) {
-  #checkin:empty,
-  #brief:empty {
-    min-height: 64px;
-    padding: 14px;
-  }
-}
-
-</style></head><body><header class="top"><h1>
-<h1 class="brand">
-  <span class="brand-icon" aria-hidden="true">
-    <svg viewBox="0 0 48 48" fill="none">
-      <rect width="48" height="48" rx="14" fill="#0D9488"/>
-      <path d="M24 35S10 27 10 18.5C10 11.5 19 9 24 17C29 9 38 11.5 38 18.5C38 27 24 35 24 35Z"
-        stroke="white" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M15 23H21L24 18L28 27L31 23H35"
-        stroke="white" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
-  </span>
-  <span>CareRelay</span>
-</h1>
-</h1><p>Consent-first family coordination</p></header><main class="wrap">
-<section class="card"><h2>New check-in</h2><label>Family member</label><input id="person" value="Daniel Shah"><label>Relationship</label><input id="relation" value="father"><label>Consent</label><select id="consent"><option value="share">Share with family</option><option value="private">Keep private</option></select><label>Update</label><textarea id="update">Dad missed his evening medication reminder and said he felt unusually tired. He is resting and asked Maya to check in later.</textarea><button onclick="createCheckin()">Create check-in</button><p class="muted">CareRelay coordinates follow-up; it is not medical advice or an emergency service.</p></section>
-<section class="card"><h2>Today’s coordination</h2><div id="notice" class="notice"></div><div id="checkin" class="muted">Create a check-in to begin.</div><div id="actions"></div></section>
-<section class="card"><h2>Family brief <span id="consentBadge" class="badge">Awaiting consent</span></h2><div id="brief" class="muted">A factual, consent-aware brief will appear here.</div><h2 style="margin-top:28px">Why it matters</h2><p class="muted">One unclear message becomes an owner-based plan, while the consent gate protects private conversations.</p></section>
-</main><script>
-let active=null;const $=id=>document.getElementById(id);const api=(url,options={})=>fetch(url,{headers:{'Content-Type':'application/json'},...options}).then(async r=>{const j=await r.json();if(!r.ok)throw Error(j.error);return j});
-async function createCheckin(){try{const data=await api('/api/checkins',{method:'POST',body:JSON.stringify({person:$('person').value,relation:$('relation').value,update:$('update').value,consent:$('consent').value})});active=data.checkIn;$('checkin').innerHTML='<div class="check"><b>'+active.person+'</b> · '+active.relation+'<br><span class="muted">'+active.update+'</span></div>';$('notice').style.display=data.safetyNotice?'block':'none';$('notice').textContent=data.safetyNotice||'';$('consentBadge').textContent=active.consent==='share'?'Sharing allowed':'Private';$('consentBadge').className='badge '+(active.consent==='private'?'private':'');$('actions').innerHTML='<button class="alt" onclick="plan()">Generate plan</button><button onclick="brief()">Create family brief</button>'; }catch(e){alert(e.message)}}
-async function plan(){const d=await api('/api/checkins/'+active.id+'/plan',{method:'POST'});$('actions').innerHTML='<h2 style="margin-top:22px">Action plan</h2>'+d.tasks.map(t=>'<div class="task">'+t.title+'<br><span class="owner">'+t.owner+'</span> · <span class="muted">'+t.due+'</span></div>').join('')+'<button onclick="brief()">Create family brief</button>'}
-async function brief(){try{const d=await api('/api/checkins/'+active.id+'/brief',{method:'POST'});$('brief').textContent=d.brief}catch(e){$('brief').textContent=e.message}}
-</script></body></html>
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#142b4a">
+  <meta name="description" content="CareRelay helps families coordinate consent-aware care follow-ups.">
+  <title>CareRelay | Family Coordination</title>
+
+  <style>
+    :root {
+      --navy: #142b4a;
+      --navy-light: #1c4263;
+      --teal: #0d9488;
+      --teal-dark: #0f766e;
+      --bg: #f3f6fb;
+      --surface: #ffffff;
+      --text: #172b45;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --radius: 16px;
+      --shadow: 0 5px 20px rgba(20, 43, 74, 0.06);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
+      font-size: 14px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    /* Header and brand */
+
+    header.top {
+      padding: 24px max(24px, calc((100% - 1100px) / 2));
+      color: white;
+      background:
+        radial-gradient(ellipse at 85% 0%, rgba(13, 148, 136, 0.22), transparent 48%),
+        linear-gradient(120deg, var(--navy), var(--navy-light));
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 0 0 7px;
+      color: white;
+      font-size: 28px;
+      font-weight: 750;
+      letter-spacing: -0.8px;
+      line-height: 1.2;
+    }
+
+    .brand-icon {
+      display: inline-flex;
+      flex: 0 0 42px;
+      width: 42px;
+      height: 42px;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    }
+
+    .brand-icon svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    header.top p {
+      margin: 0;
+      color: #d4e3f2;
+      font-size: 13px;
+    }
+
+    .header-tagline {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      margin-top: 13px;
+      padding: 5px 10px;
+      color: #d9fffa;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 650;
+    }
+
+    .header-tagline::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      background: #5eead4;
+      border-radius: 50%;
+    }
+
+    /* Main layout */
+
+    main {
+      width: min(1100px, calc(100% - 40px));
+      margin: 28px auto 44px;
+    }
+
+    .intro {
+      margin-bottom: 20px;
+    }
+
+    .intro h2 {
+      margin: 0 0 4px;
+      color: var(--navy);
+      font-size: 21px;
+      font-weight: 750;
+      letter-spacing: -0.5px;
+    }
+
+    .intro p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .wrap {
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+      grid-template-areas:
+        "checkin coordination"
+        "checkin brief";
+      align-items: start;
+      gap: 20px;
+      width: 100%;
+    }
+
+    .wrap > .card {
+      width: 100%;
+      min-width: 0;
+      padding: 22px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .wrap > .card:nth-child(1) {
+      grid-area: checkin;
+    }
+
+    .wrap > .card:nth-child(2) {
+      grid-area: coordination;
+    }
+
+    .wrap > .card:nth-child(3) {
+      grid-area: brief;
+    }
+
+    .card h2 {
+      margin: 0 0 15px;
+      color: var(--navy);
+      font-size: 18px;
+      font-weight: 750;
+      line-height: 1.4;
+      letter-spacing: -0.3px;
+    }
+
+    .section-heading {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    .section-heading h2 {
+      margin: 0;
+    }
+
+    /* Labels and form fields */
+
+    label {
+      display: block;
+      margin: 13px 0 5px;
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 650;
+    }
+
+    input,
+    select,
+    textarea {
+      display: block;
+      width: 100%;
+      min-width: 0;
+      padding: 10px 12px;
+      color: var(--text);
+      background: #fff;
+      border: 1px solid #cbd5e1;
+      border-radius: 9px;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.18s, box-shadow 0.18s;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--teal);
+      box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.12);
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+      color: #94a3b8;
+    }
+
+    textarea {
+      min-height: 125px;
+      resize: vertical;
+      line-height: 1.7;
+    }
+
+    .field-help {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    /* Buttons */
+
+    button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      min-height: 40px;
+      margin-top: 14px;
+      padding: 10px 16px;
+      color: white;
+      background: var(--teal);
+      border: 1px solid transparent;
+      border-radius: 9px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.18s, transform 0.18s, box-shadow 0.18s;
+    }
+
+    button:hover:not(:disabled) {
+      background: var(--teal-dark);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 10px rgba(13, 148, 136, 0.15);
+    }
+
+    button:focus-visible {
+      outline: 3px solid #5eead4;
+      outline-offset: 3px;
+    }
+
+    button:disabled {
+      opacity: 0.65;
+      cursor: wait;
+      transform: none;
+    }
+
+    button.secondary {
+      color: var(--navy);
+      background: #fff;
+      border-color: var(--border);
+    }
+
+    button.secondary:hover:not(:disabled) {
+      color: var(--teal-dark);
+      background: #f0fdfa;
+      border-color: #99f6e4;
+      box-shadow: none;
+    }
+
+    .form-submit {
+      width: 100%;
+      margin-top: 19px;
+    }
+
+    .muted {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .form-disclaimer {
+      margin: 13px 0 0;
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    /* Consent badge */
+
+    .badge {
+      display: inline-flex;
+      flex: 0 0 auto;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 10px;
+      color: #0f766e;
+      background: #ccfbf1;
+      border: 1px solid #99f6e4;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 750;
+      line-height: 1.4;
+    }
+
+    .badge::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      flex: 0 0 6px;
+      background: currentColor;
+      border-radius: 50%;
+    }
+
+    .badge.private {
+      color: #92400e;
+      background: #fef3c7;
+      border-color: #fcd34d;
+    }
+
+    .badge.pending {
+      color: #475569;
+      background: #f1f5f9;
+      border-color: #cbd5e1;
+    }
+
+    /* Notices */
+
+    .notice {
+      margin-bottom: 12px;
+      padding: 10px 12px;
+      color: #92400e;
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      border-radius: 9px;
+      font-size: 13px;
+      line-height: 1.6;
+      overflow-wrap: anywhere;
+    }
+
+    .notice:empty {
+      display: none;
+    }
+
+    /* Dynamic check-in panel */
+
+    .checkin-panel {
+      padding: 15px;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow-wrap: anywhere;
+    }
+
+    .checkin-name {
+      margin-bottom: 3px;
+      color: var(--navy);
+      font-size: 15px;
+      font-weight: 750;
+    }
+
+    .checkin-relation {
+      margin-bottom: 10px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .checkin-update {
+      margin: 0;
+      color: #334155;
+      font-size: 13px;
+      line-height: 1.8;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+
+    .empty-state {
+      padding: 17px;
+      color: var(--muted);
+      background: #f8fafc;
+      border: 1px dashed #cbd5e1;
+      border-radius: 12px;
+      font-size: 13px;
+      line-height: 1.75;
+    }
+
+    /* Action plan */
+
+    #actions {
+      display: grid;
+      gap: 11px;
+      margin-top: 17px;
+      padding-top: 16px;
+      border-top: 1px solid #e8eef5;
+    }
+
+    #actions:empty {
+      display: none;
+    }
+
+    #actions h2 {
+      margin: 0;
+      color: var(--navy);
+      font-size: 17px;
+    }
+
+    .task {
+      padding: 14px 15px;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--teal);
+      border-radius: 11px;
+      overflow-wrap: anywhere;
+      transition: border-color 0.18s, box-shadow 0.18s;
+    }
+
+    .task:hover {
+      border-color: #99f6e4;
+      box-shadow: 0 4px 12px rgba(20, 43, 74, 0.05);
+    }
+
+    .task-title {
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 650;
+      line-height: 1.75;
+    }
+
+    .task-meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 7px;
+      margin-top: 9px;
+    }
+
+    .owner {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 8px;
+      color: #0f766e;
+      background: #ccfbf1;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 750;
+    }
+
+    .due {
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .action-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .action-buttons button {
+      margin: 0;
+    }
+
+    /* Family brief */
+
+    #brief {
+      min-height: 76px;
+      padding: 15px;
+      color: #334155;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      font-size: 13px;
+      line-height: 1.85;
+      overflow-wrap: anywhere;
+      white-space: pre-wrap;
+    }
+
+    .brief-note {
+      margin: 16px 0 0;
+      padding-top: 14px;
+      border-top: 1px solid #edf2f7;
+    }
+
+    .brief-note h3 {
+      margin: 0 0 6px;
+      color: var(--navy);
+      font-size: 14px;
+    }
+
+    .brief-note p {
+      margin: 0;
+    }
+
+    /* Footer */
+
+    footer {
+      width: min(1100px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 0 0 26px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 11px;
+      line-height: 1.7;
+    }
+
+    /* Responsive layout */
+
+    @media (max-width: 760px) {
+      header.top {
+        padding: 20px 18px;
+      }
+
+      .brand {
+        gap: 10px;
+        font-size: 25px;
+      }
+
+      .brand-icon {
+        flex-basis: 38px;
+        width: 38px;
+        height: 38px;
+        border-radius: 11px;
+      }
+
+      main {
+        width: calc(100% - 24px);
+        margin: 18px auto 30px;
+      }
+
+      .intro h2 {
+        font-size: 19px;
+      }
+
+      .wrap {
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-areas:
+          "checkin"
+          "coordination"
+          "brief";
+        gap: 15px;
+      }
+
+      .wrap > .card {
+        padding: 18px;
+        border-radius: 14px;
+      }
+
+      .card h2 {
+        font-size: 17px;
+      }
+
+      footer {
+        width: calc(100% - 24px);
+      }
+
+      .action-buttons {
+        flex-direction: column;
+      }
+
+      .action-buttons button {
+        width: 100%;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="top">
+    <h1 class="brand">
+      <span class="brand-icon" aria-hidden="true">
+        <svg viewBox="0 0 48 48" fill="none">
+          <rect width="48" height="48" rx="14" fill="#0D9488"/>
+          <path
+            d="M24 35S10 27 10 18.5C10 11.5 19 9 24 17C29 9 38 11.5 38 18.5C38 27 24 35 24 35Z"
+            stroke="white"
+            stroke-width="2.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M15 23H21L24 18L28 27L31 23H35"
+            stroke="white"
+            stroke-width="2.4"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </span>
+      <span>CareRelay</span>
+    </h1>
+
+    <p>Consent-first family coordination</p>
+
+    <div class="header-tagline">
+      Thoughtful follow-ups. Clear ownership.
+    </div>
+  </header>
+
+  <main>
+    <div class="intro">
+      <h2>Family coordination dashboard</h2>
+      <p>Turn care updates into clear, consent-aware next steps.</p>
+    </div>
+
+    <div class="wrap">
+      <!-- Check-in form -->
+      <section class="card">
+        <h2>New check-in</h2>
+
+        <form id="checkinForm">
+          <label for="person">Family member</label>
+          <input
+            id="person"
+            name="person"
+            value="Daniel Shah"
+            autocomplete="name"
+            required
+          >
+
+          <label for="relation">Relationship</label>
+          <input
+            id="relation"
+            name="relation"
+            value="father"
+            required
+          >
+
+          <label for="consent">Sharing preference</label>
+          <select id="consent" name="consent">
+            <option value="share">Share with family</option>
+            <option value="private">Keep private</option>
+          </select>
+          <p class="field-help">
+            Your choice controls whether a family brief can be created.
+          </p>
+
+          <label for="update">Check-in update</label>
+          <textarea
+            id="update"
+            name="update"
+            required
+            placeholder="Describe the update or follow-up needed..."
+          >Dad missed his evening medication reminder and said he felt unusually tired. He is resting and asked Maya to check in later.</textarea>
+
+          <button id="createButton" class="form-submit" type="submit">
+            Create check-in
+          </button>
+        </form>
+
+        <p class="muted form-disclaimer">
+          CareRelay coordinates follow-up; it is not medical advice or an
+          emergency service.
+        </p>
+      </section>
+
+      <!-- Coordination panel -->
+      <section class="card">
+        <div class="section-heading">
+          <h2>Today's coordination</h2>
+        </div>
+
+        <div id="notice" class="notice" role="status" aria-live="polite"></div>
+
+        <div id="checkin" class="empty-state" aria-live="polite">
+          Your coordination updates will appear here after a check-in.
+        </div>
+
+        <div id="actions"></div>
+      </section>
+
+      <!-- Family brief panel -->
+      <section class="card">
+        <div class="section-heading">
+          <h2>Family brief</h2>
+          <span id="consentBadge" class="badge pending">
+            Awaiting check-in
+          </span>
+        </div>
+
+        <div id="brief" aria-live="polite">Your family brief will appear here when a shareable check-in is available.</div>
+
+        <div class="brief-note">
+          <h3>Why it matters</h3>
+          <p class="muted">
+            One unclear message becomes an owner-based plan, while the
+            consent gate protects private conversations.
+          </p>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    CareRelay · Consent-first coordination · Not a medical advice or
+    emergency service.
+  </footer>
+
+  <script>
+    "use strict";
+
+    let active = null;
+    let requestInProgress = false;
+
+    const $ = (id) => document.getElementById(id);
+
+    const api = async (url, options = {}) => {
+      const response = await fetch(url, {
+        headers: { "Content-Type": "application/json" },
+        ...options
+      });
+
+      let data;
+
+      try {
+        data = await response.json();
+      } catch {
+        throw new Error("The server returned an invalid response.");
+      }
+
+      if (!response.ok) {
+        throw new Error(data.error || "The request could not be completed.");
+      }
+
+      return data;
+    };
+
+    // Escape dynamic text before inserting it into HTML.
+    function escapeHTML(value) {
+      return String(value ?? "").replace(/[&<>"']/g, (char) => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      })[char]);
+    }
+
+    function setNotice(message = "") {
+      $("notice").textContent = message;
+      $("notice").hidden = !message;
+    }
+
+    function setBadge(consent) {
+      const badge = $("consentBadge");
+
+      if (consent === "share") {
+        badge.textContent = "Sharing allowed";
+        badge.className = "badge";
+      } else if (consent === "private") {
+        badge.textContent = "Private";
+        badge.className = "badge private";
+      } else {
+        badge.textContent = "Awaiting check-in";
+        badge.className = "badge pending";
+      }
+    }
+
+    function renderCheckin(checkIn) {
+      $("checkin").className = "checkin-panel";
+
+      $("checkin").innerHTML = `
+        <div class="checkin-name">${escapeHTML(checkIn.person)}</div>
+        <div class="checkin-relation">${escapeHTML(checkIn.relation)}</div>
+        <p class="checkin-update">${escapeHTML(checkIn.update)}</p>
+      `;
+    }
+
+    function renderInitialActions() {
+      if (!active) {
+        $("actions").innerHTML = "";
+        return;
+      }
+
+      const briefButton = active.consent === "share"
+        ? `<button type="button" id="briefButton">Create family brief</button>`
+        : "";
+
+      $("actions").innerHTML = `
+        <div class="action-buttons">
+          <button type="button" class="secondary" id="planButton">
+            Generate plan
+          </button>
+          ${briefButton}
+        </div>
+      `;
+
+      $("planButton").addEventListener("click", plan);
+
+      if (active.consent === "share") {
+        $("briefButton").addEventListener("click", brief);
+      }
+    }
+
+    async function createCheckin(event) {
+      event.preventDefault();
+
+      if (requestInProgress) return;
+
+      const button = $("createButton");
+      requestInProgress = true;
+      button.disabled = true;
+      button.textContent = "Creating check-in…";
+      setNotice("");
+
+      try {
+        const payload = {
+          person: $("person").value.trim(),
+          relation: $("relation").value.trim(),
+          update: $("update").value.trim(),
+          consent: $("consent").value
+        };
+
+        if (!payload.person || !payload.relation || !payload.update) {
+          throw new Error("Please complete all check-in fields.");
+        }
+
+        const data = await api("/api/checkins", {
+          method: "POST",
+          body: JSON.stringify(payload)
+        });
+
+        if (!data.checkIn) {
+          throw new Error("The server did not return a check-in.");
+        }
+
+        active = data.checkIn;
+
+        renderCheckin(active);
+        setBadge(active.consent);
+        setNotice(data.safetyNotice || "");
+
+        // Clear previous results so a previous shared brief cannot
+        // remain visible after switching to a private check-in.
+        $("brief").textContent = active.consent === "private"
+          ? "This check-in is private. No family brief was created."
+          : "Generate a family brief when you're ready.";
+
+        renderInitialActions();
+      } catch (error) {
+        setNotice(error.message || "Could not create the check-in.");
+      } finally {
+        requestInProgress = false;
+        button.disabled = false;
+        button.textContent = "Create check-in";
+      }
+    }
+
+    async function plan() {
+      if (!active || requestInProgress) return;
+
+      requestInProgress = true;
+      setNotice("");
+
+      const button = $("planButton");
+      if (button) {
+        button.disabled = true;
+        button.textContent = "Generating plan…";
+      }
+
+      try {
+        const data = await api(
+          "/api/checkins/" + encodeURIComponent(active.id) + "/plan",
+          { method: "POST" }
+        );
+
+        const tasks = Array.isArray(data.tasks) ? data.tasks : [];
+
+        $("actions").innerHTML = `
+          <h2>Action plan</h2>
+          <div id="taskList"></div>
+          <div class="action-buttons">
+            ${
+              active.consent === "share"
+                ? `<button type="button" id="briefButton">Create family brief</button>`
+                : ""
+            }
+            <button type="button" class="secondary" id="refreshPlanButton">
+              Generate plan again
+            </button>
+          </div>
+        `;
+
+        const taskList = $("taskList");
+
+        if (tasks.length === 0) {
+          taskList.innerHTML = `
+            <div class="empty-state">
+              No tasks have been generated yet.
+            </div>
+          `;
+        } else {
+          taskList.innerHTML = tasks.map((task) => `
+            <article class="task">
+              <div class="task-title">${escapeHTML(task.title)}</div>
+              <div class="task-meta">
+                <span class="owner">${escapeHTML(task.owner || "Unassigned")}</span>
+                ${
+                  task.due
+                    ? `<span class="due">${escapeHTML(task.due)}</span>`
+                    : ""
+                }
+              </div>
+            </article>
+          `).join("");
+        }
+
+        $("refreshPlanButton").addEventListener("click", plan);
+
+        if (active.consent === "share") {
+          $("briefButton").addEventListener("click", brief);
+        }
+      } catch (error) {
+        setNotice("Could not generate the plan: " + error.message);
+        renderInitialActions();
+      } finally {
+        requestInProgress = false;
+      }
+    }
+
+    async function brief() {
+      if (!active || requestInProgress) return;
+
+      // Client-side guard; the server must enforce consent too.
+      if (active.consent !== "share") {
+        $("brief").textContent =
+          "This check-in is private. No family brief was created.";
+        setBadge("private");
+        return;
+      }
+
+      requestInProgress = true;
+      setNotice("");
+      $("brief").textContent = "Creating your family brief…";
+
+      const button = $("briefButton");
+      if (button) {
+        button.disabled = true;
+        button.textContent = "Creating brief…";
+      }
+
+      try {
+        const data = await api(
+          "/api/checkins/" + encodeURIComponent(active.id) + "/brief",
+          { method: "POST" }
+        );
+
+        // If the server explicitly returns a private message, show it.
+        $("brief").textContent = data.brief || "No brief was returned.";
+      } catch (error) {
+        $("brief").textContent = "Could not create the family brief.";
+        setNotice(error.message || "Please try again.");
+      } finally {
+        requestInProgress = false;
+
+        const currentButton = $("briefButton");
+        if (currentButton) {
+          currentButton.disabled = false;
+          currentButton.textContent = "Create family brief";
+        }
+      }
+    }
+
+    $("checkinForm").addEventListener("submit", createCheckin);
+  </script>
+</body>
+</html>

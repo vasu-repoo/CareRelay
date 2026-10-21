@@ -79,6 +79,7 @@ export async function makeFamilyBrief(
     });
 
     const result = await client.send(command);
+    console.log("✅ Amazon Bedrock request succeeded");
 
     const brief = result.output?.message?.content
       ?.find((item) => "text" in item)

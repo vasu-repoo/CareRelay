@@ -1,128 +1,120 @@
-# CareRelay
+# CareRelay 💙
 
-> **Consent-first family handoffs, powered by a self-hosted Alexa+ MCP server.**
+### Consent-first family coordination
 
-CareRelay turns one sensitive family update into a clear, respectful follow-up plan. It records a consent-aware check-in, applies a deterministic safety gate, assigns small actions to the right people, and produces a factual family brief only when sharing is permitted.
+CareRelay turns family check-ins into clear, actionable coordination plans while respecting each person's choice about what information can be shared.
 
-Built for the **Alexa+ Track** of the Build, Ship, Shape: Amazon Developer Hackathon.
+**Live Demo:** https://carerelay-7wal.onrender.com
+**GitHub Repository:** https://github.com/vasu-repoo/CareRelay
 
-## The problem
+---
 
-Care coordination often happens in scattered chats: someone says “Dad missed his reminder and feels tired,” but nobody knows who will follow up, whether the update may be shared, or what should happen next. Existing chat experiences can make sensitive conversations feel casual and ambiguous.
+## 💡 The Problem
 
-CareRelay makes the handoff explicit: **update → consent + safety gate → owned tasks → family brief**.
+Family members often coordinate care through scattered messages, calls, and reminders. Important updates can get lost, responsibilities may be unclear, and private information can be shared without sufficient care.
 
-## What it does
+## ✨ Our Solution
 
-1. Creates a structured family check-in with a clear sharing choice.
-2. Uses a deterministic phrase-based safety gate for urgent language. It never diagnoses, prescribes, or decides whether an emergency exists; it directs users to local emergency services or qualified professionals when appropriate.
-3. Generates three concrete, owner-based follow-up tasks.
-4. Blocks family briefs when the update is private.
-5. Exposes the same workflow through four MCP tools, so an Alexa+ agent or any compatible MCP host can orchestrate it.
+CareRelay provides a simple workflow for recording a check-in, choosing whether it can be shared, generating a family coordination brief, and organizing follow-up tasks.
 
-## Why MCP
+### Key Features
 
-The browser dashboard is a simulator. The product’s core capability is its self-hosted **Model Context Protocol** server:
+* **Consent-first sharing:** A private check-in does not generate a shareable family brief.
+* **Family coordination briefs:** Summarize shared updates into a clear, readable message.
+* **Actionable tasks:** Organize follow-ups by task owner and due date.
+* **Simple dashboard:** Keep check-ins, family briefs, and tasks in one interface.
+* **Privacy-conscious design:** Keep private information out of shareable briefs when sharing has not been permitted.
+* **AI integration:** The application is configured to use Amazon Bedrock with Amazon Nova 2 Lite. Successful invocation in the deployed environment must be verified separately from local fallback behavior.
 
-| MCP tool | Purpose |
-| --- | --- |
-| `create_checkin` | Save a check-in and return its consent state and safety notice. |
-| `create_followup_plan` | Create assigned, time-bound follow-up tasks. |
-| `get_daily_brief` | Return a shareable family brief only when consent permits. |
-| `get_consent_status` | Make the sharing decision visible to the agent. |
+## 🛠️ Technology Stack
 
-This makes the workflow inspectable and reusable—not a hidden prompt behind a chat box.
+* TypeScript
+* Node.js
+* HTML and CSS
+* Amazon Bedrock — Amazon Nova 2 Lite
+* Render — web application hosting
+* Git and GitHub
 
-## Architecture
+## 🔄 How It Works
 
-```text
-Browser dashboard
-       │ HTTP JSON
-Express API ───────────────► Amazon Bedrock Converse API (optional)
-       │
-       ├── deterministic consent + safety rules
-       ├── in-memory demo store
-       └── self-hosted MCP stdio server
-             ├── create_checkin
-             ├── create_followup_plan
-             ├── get_daily_brief
-             └── get_consent_status
-```
+1. Record a family member's check-in.
+2. Select the appropriate consent option.
+3. If sharing is permitted, generate a family brief.
+4. Review the follow-up plan and task owners.
+5. Use the plan to coordinate the next steps.
 
-## Run locally
+Private check-ins should remain private and must not generate a shareable family brief.
+
+## 🚀 Run Locally
 
 ### Prerequisites
 
-- Node.js 20 or newer
-- npm
+* Node.js and npm
+* Git
 
-### Start the dashboard
+### 1. Clone the repository
 
-```powershell
+```bash
 git clone https://github.com/vasu-repoo/CareRelay.git
 cd CareRelay
-Copy-Item .env.example .env
+```
+
+### 2. Install dependencies
+
+```bash
 npm install
-npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+### 3. Configure environment variables
 
-The application starts in a complete **local demo mode**. This keeps the primary Alexa+ MCP workflow testable even when AWS credentials are unavailable.
-
-### Prove the MCP workflow
-
-```powershell
-npm run mcp:demo
-```
-
-The demo client launches the server, lists all four tools, and calls them in the same sequence shown in the dashboard.
-
-## Amazon Bedrock integration
-
-CareRelay includes an optional Amazon Bedrock Converse API integration for the family brief, configured for **Amazon Nova 2 Lite**:
+Create a `.env` file in the project root and configure the values required by your application.
 
 ```env
+USE_BEDROCK=false
 AWS_REGION=ap-southeast-2
 BEDROCK_MODEL_ID=global.amazon.nova-2-lite-v1:0
-USE_BEDROCK=true
 ```
 
-The integration sends only the structured fictional demo check-in and its tasks. Its system prompt constrains the output to a calm, factual message under 70 words and explicitly forbids diagnosis, prescriptions, and speculation.
+The example disables Bedrock so you can test the local fallback first.
 
-Keep `USE_BEDROCK=false` unless your AWS account can successfully invoke Bedrock. Do not commit `.env` or credentials.
+To enable Bedrock, set `USE_BEDROCK=true` and configure AWS credentials securely in your local environment. Never commit `.env` files, access keys, or secret keys to GitHub.
 
-## Safety and privacy by design
+### 4. Start the application
 
-- The demo uses fictional data only.
-- A private check-in never produces a shareable brief.
-- Urgent-phrase matching is transparent and deterministic, not an opaque clinical model.
-- CareRelay does not provide medical advice, medication changes, diagnosis, or emergency dispatch.
-- A production implementation would add encryption, granular roles, auditable consent, and clinician-reviewed escalation policies.
-
-## Demo scenario
-
-Use this fictional scenario in the dashboard and MCP client:
-
-> Daniel Shah missed his evening medication reminder and said he felt unusually tired. He is resting and asked Maya to check in later.
-
-The demo shows a consent-aware check-in, an action plan owned by Maya and Arjun, the consent status, and a factual family brief.
-
-## Project structure
-
-```text
-public/index.html       # Dashboard simulator
-src/care.ts             # Consent, check-in, safety, and task logic
-src/server.ts           # Express API and static dashboard host
-src/mcp.ts              # Self-hosted MCP server
-src/mcp-demo.ts         # Repeatable MCP proof client
-src/bedrock.ts          # Optional Bedrock Converse API family brief
+```bash
+npm start
 ```
 
-## Built with
+Use the local address printed by the application, if applicable.
 
-TypeScript · Node.js · Express · Model Context Protocol · Zod · Amazon Bedrock Converse API · Amazon Nova 2 Lite
+## ☁️ Deployment
 
-## License
+CareRelay is deployed on Render and connected to its GitHub repository.
 
-[MIT](LICENSE)
+For a deployed Bedrock integration, configure the required environment variables in Render's service settings. Verify AWS credentials, region, model access, and successful model invocation in the service logs.
+
+Do not expose AWS credentials in source code, screenshots, public logs, or repository files.
+
+## 🔐 Privacy and Safety
+
+* Respect the user's sharing choice.
+* Do not create a shareable family brief for a private check-in.
+* Share only information needed for coordination.
+* Treat generated content as a coordination aid, not medical advice.
+* Use fictional data in public demonstrations and screenshots.
+
+**Important:** A consent gate in the application is not a substitute for secure storage, access controls, and appropriate handling of sensitive information.
+
+## 🗺️ Roadmap
+
+* [ ] Verify successful Amazon Bedrock invocation in the deployed environment.
+* [ ] Improve error handling and integration diagnostics.
+* [ ] Expand automated tests for consent and task workflows.
+* [ ] Improve accessibility and responsive behavior.
+* [ ] Prepare a concise end-to-end project demonstration.
+
+## 🎯 Project Goal
+
+CareRelay aims to make family coordination clearer, more actionable, and more respectful of consent.
+
+Built for a developer hackathon project.
